@@ -13,7 +13,7 @@ float average(float* x, int size) {
     return v / size;
 }
 
-float bla2(float* x, int size) {
+float squareAverage(float* x, int size) {
     int i = 0;
     float v = 0;
     float f = 0;
@@ -26,7 +26,7 @@ float bla2(float* x, int size) {
 }
 
 float var(float* x, int size){
-    float z = bla2(x, size);
+    float z = squareAverage(x, size);
     float w = average(x, size);
     w = w * w;
     return z - w;
