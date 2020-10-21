@@ -13,28 +13,31 @@ using std::endl;
 
 float average(float* x, int size) {
     int i = 0;
-    float v = 0;
+    // E == sigma
+    float E = 0;
     while (i != size) {
-        v += x[i];
+        E += x[i];
         i++;
     }
-    return ((float) v / size);
+    return ((float) E / size);
 }
 
 float squareAverage(float* x, int size) {
     int i = 0;
-    float v = 0;
+    // E == sigma
+    float E = 0;
     float f = 0;
     while (i != size) {
         f = x[i] * x[i];
-        v += f;
+        E += f;
         i++;
     }
-    return ((float) v / size);
+    return ((float) E / size);
 }
-
+// returns the variance of X and Y
 float var(float* x, int size){
     float sqrAvg = squareAverage(x, size);
+    //u average is mio(greek letter for Expected value)
     float uAvg = average(x, size);
     return ((float) sqrAvg - (uAvg * uAvg));
 }
@@ -44,12 +47,13 @@ float cov(float* x, float* y, int size){
     float xAvg = average(x, size);
     float yAvg = average(y, size);
     int i = 0;
-    float j = 0;
+    // E == sigma
+    float avgE = 0;
     while (i != size){
-        j += ((x[i] - xAvg) * (y[i] - yAvg));
+        avgE += ((x[i] - xAvg) * (y[i] - yAvg));
         i++;
     }
-    return ((float) j / size);
+    return ((float) avgE / size);
 }
 
 // returns the Pearson correlation coefficient of X and Y
@@ -88,12 +92,12 @@ Line linear_reg(Point** points, int size){
 
 // returns the deviation between point p and the line equation of the points
 float dev(Point p,Point** points, int size){
-    Line l = linear_reg(points, size);
-    return dev(p, l);
+    Line line = linear_reg(points, size);
+    return dev(p, line);
 }
 
 // returns the deviation between point p and the line
 float dev(Point p,Line l){
-    //the equation is : F(x) -- Y = a * X + b -> a * X + b - f(x) -- Y
+    //the equation is : F(x) <--> Y = a * X + b -> |a * X + b - f(x)| <--> Y
     return std::abs((l.a * p.x + l.b) - p.y);
 }
