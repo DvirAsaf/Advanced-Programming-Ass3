@@ -3,15 +3,12 @@
  *
  * @author : Dvir Asaf 313531113.
  */
-
 #include <iostream>
 #include <cmath>
 #include "anomaly_detection_util.h"
-
 using std::cout;
 using std::endl;
-
-float average(float* x, int size) {
+float avg(float* x, int size) {
     int i = 0;
     // E == sigma
     float E = 0;
@@ -21,8 +18,7 @@ float average(float* x, int size) {
     }
     return ((float) E / size);
 }
-
-float squareAverage(float* x, int size) {
+float squareAvg(float* x, int size) {
     int i = 0;
     // E == sigma
     float E = 0;
@@ -36,16 +32,15 @@ float squareAverage(float* x, int size) {
 }
 // returns the variance of X and Y
 float var(float* x, int size){
-    float sqrAvg = squareAverage(x, size);
-    //u average is mio(greek letter for Expected value)
-    float uAvg = average(x, size);
+    float sqrAvg = squareAvg(x, size);
+    //u avg is mio(greek letter for Expected value)
+    float uAvg = avg(x, size);
     return ((float) sqrAvg - (uAvg * uAvg));
 }
-
 // returns the covariance of X and Y
 float cov(float* x, float* y, int size){
-    float xAvg = average(x, size);
-    float yAvg = average(y, size);
+    float xAvg = avg(x, size);
+    float yAvg = avg(y, size);
     int i = 0;
     // E == sigma
     float avgE = 0;
@@ -55,7 +50,6 @@ float cov(float* x, float* y, int size){
     }
     return ((float) avgE / size);
 }
-
 // returns the Pearson correlation coefficient of X and Y
 float pearson(float* x, float* y, int size){
     float avg = cov(x, y, size);
@@ -66,7 +60,6 @@ float pearson(float* x, float* y, int size){
     float root = rootX * rootY;
     return ((float) avg / root);
 }
-
 // performs a linear regression and return s the line equation
 Line linear_reg(Point** points, int size){
     //insert value to the right float
@@ -79,9 +72,9 @@ Line linear_reg(Point** points, int size){
         y[i] = points[i] -> y;
         i++;
     }
-    //the average of X and Y
-    float avgX = average(x, size);
-    float avgY = average(y, size);
+    //the avg of X and Y
+    float avgX = avg(x, size);
+    float avgY = avg(y, size);
     //the equation is : a = cov(x,y) / var(x)
     float a = (cov(x, y, size) / var(x, size));
     //the equation is : b = avgY - a*avgX
@@ -89,13 +82,11 @@ Line linear_reg(Point** points, int size){
     //the equation is : Y = a * X +b
     return Line(a, b);
 }
-
 // returns the deviation between point p and the line equation of the points
 float dev(Point p,Point** points, int size){
     Line line = linear_reg(points, size);
     return dev(p, line);
 }
-
 // returns the deviation between point p and the line
 float dev(Point p,Line l){
     //the equation is : F(x) <--> Y = a * X + b -> |a * X + b - f(x)| <--> Y

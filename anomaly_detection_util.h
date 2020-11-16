@@ -1,11 +1,8 @@
 //
 // Created by Dvir on 10/20/2020.
 //
-
 #ifndef UNTITLED3_ANOMALY_DETECTION_UTIL_H
 #define UNTITLED3_ANOMALY_DETECTION_UTIL_H
-
-
 // returns the variance of X and Y
 float var(float* x, int size);
 // returns the covariance of X and Y
@@ -14,7 +11,7 @@ float cov(float* x, float* y, int size);
 float pearson(float* x, float* y, int size);
 class Line{
 public:
-    const float a,b;
+    float a,b;
     Line(float a, float b):a(a),b(b){}
     float f(float x){
         return a*x+b;
@@ -32,4 +29,5 @@ float dev(Point p,Point** points, int size);
 // returns the deviation between point p and the line
 float dev(Point p,Line l);
 
+float avg(float* x, int size);
 #endif //UNTITLED3_ANOMALY_DETECTION_UTIL_H
