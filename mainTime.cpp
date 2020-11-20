@@ -21,6 +21,8 @@ int main() {
         cout<< x.first<<endl;
         cout<< x.second[0]<<endl;
     }
-
+    for( auto x: ts.getVectorByName("A")){
+        cout<< x<<endl;
+    }
     return 0;
 }

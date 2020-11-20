@@ -79,27 +79,41 @@ void TimeSeries::ReadCols(vector<pair<string, vector<float>>> &result, string &c
 //        }
 //    }
 //    // if we didn't find return an empty vector
-//    vector<float> vec;
-//    return vec;
+//    return {};
 //    }
 //}
 
-bool TimeSeries::isNameInVec(vector<pair<string, vector<float>>> cols, string name) {
-    for(int i = cols.size() - 1; i <= 0; i--) {
-        if (cols[i].first == name){
-            return true;
-        }
-    }
-    return false;
-}
+//bool TimeSeries::isNameInVec(vector<pair<string, vector<float>>> cols, string name) {
+//    for(int i = cols.size() - 1; i <= 0; i--) {
+//        if (cols[i].first == name){
+//            return true;
+//        }
+//    }
+//    return false;
+//}
 
-map<string , vector<float>> TimeSeries::ConvertToMap(std::vector<std::pair<std::string, std::vector<float>>> three_cols){
+map<string , vector<float>> TimeSeries::ConvertToMap(vector<pair<string, vector<float>>> three_cols){
     map<string , vector<float>> map;
     for (auto const& x : three_cols){
         string col_name = x.first;
         auto vec = x.second;
         map.insert({col_name, vec});
-
     }
     return map;
+}
+
+bool TimeSeries::isVectorNameInMap(string name) {
+    map<string, vector<float>>::iterator it;
+    it = this->allData.find(name);
+    if (it == this->allData.end()) {
+        return false;
+    }
+    return true;
+}
+vector<float> TimeSeries::getVectorByName(string name) {
+    if (isVectorNameInMap(name)) {
+        auto x = this->allData.find(name);
+        return x->second;
+    }
+    return {};
 }

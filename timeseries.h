@@ -8,6 +8,7 @@ using namespace std;
 #include <utility> // std::pair
 #include <stdexcept> // std::runtime_error
 #include <sstream> // std::stringstream
+#include "anomaly_detection_util.h"
 
 class TimeSeries {
 private:
@@ -26,9 +27,11 @@ public:
     ifstream &
     readTextLineByLine(vector<pair<string, vector<float>>> &result, ifstream &myFile, string &line,
                        float val) const;
-    vector<float> getVecByName(vector<pair<string, vector<float>>> cols, string name);
-    bool isNameInVec(vector<pair<string, vector<float>>> cols, string name);
-    vector<pair<string, vector<float>>>getAllData() const;
+//    vector<float> getVecByName(vector<pair<string, vector<float>>> cols, string name);
+//    bool isNameInVec(vector<pair<string, vector<float>>> cols, string name);
+//    vector<pair<string, vector<float>>>getAllData() const;
     map<string , vector<float>> ConvertToMap(std::vector<std::pair<std::string, std::vector<float>>> three_cols);
+    bool isVectorNameInMap(string name);
+    vector<float> getVectorByName(string name);
 };
 #endif /* TIMESERIES_H_ */
