@@ -47,8 +47,7 @@ TimeSeries::readTextLineByLine(vector<pair<string, vector<float>>> &result, ifst
     return myFile;
 }
 
-void TimeSeries::ReadCols(vector<pair<string, vector<float>>> &result, string &colname,
-                          ifstream &myFile, string &line) {
+void TimeSeries::ReadCols(vector<pair<string, vector<float>>> &result, string &colname, ifstream &myFile, string &line) {
     if(myFile.good())
     {
         // Extract the first line in the file
@@ -94,7 +93,7 @@ void TimeSeries::ReadCols(vector<pair<string, vector<float>>> &result, string &c
 
 map<string , vector<float>> TimeSeries::ConvertToMap(vector<pair<string, vector<float>>> three_cols){
     map<string , vector<float>> map;
-    for (auto const& x : three_cols){
+    for (auto  &x : three_cols){
         string col_name = x.first;
         auto vec = x.second;
         map.insert({col_name, vec});
@@ -102,15 +101,16 @@ map<string , vector<float>> TimeSeries::ConvertToMap(vector<pair<string, vector<
     return map;
 }
 
-bool TimeSeries::isVectorNameInMap(string name) {
+bool TimeSeries::isVectorNameInMap(string name) const{
     map<string, vector<float>>::iterator it;
-    it = this->allData.find(name);
+    auto x = this->allData.find(name);
     if (it == this->allData.end()) {
         return false;
     }
     return true;
 }
-vector<float> TimeSeries::getVectorByName(string name) {
+
+vector<float> TimeSeries::getVectorByName(string name) const{
     if (isVectorNameInMap(name)) {
         auto x = this->allData.find(name);
         return x->second;

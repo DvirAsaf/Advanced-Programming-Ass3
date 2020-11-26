@@ -15,14 +15,13 @@ private:
 //    map<string , vector<float>> allData;
 public:
     map<string , vector<float>> allData;
-
     explicit TimeSeries(const char* CSVfileName)
     {
         this->allData = ConvertToMap(read_csv(CSVfileName));
     }
-    std::vector<std::pair<std::string, std::vector<float>>> read_csv(string filename);
-    void ReadCols(vector<pair<string, vector<float>>> &result, std::string &colname, ifstream &myFile,
-                  std::string &line);
+    vector<pair<string, vector<float>>> read_csv(string filename);
+    void ReadCols(vector<pair<string, vector<float>>> &result, string &colname, ifstream &myFile,
+                  string &line);
 
     ifstream &
     readTextLineByLine(vector<pair<string, vector<float>>> &result, ifstream &myFile, string &line,
@@ -30,8 +29,9 @@ public:
 //    vector<float> getVecByName(vector<pair<string, vector<float>>> cols, string name);
 //    bool isNameInVec(vector<pair<string, vector<float>>> cols, string name);
 //    vector<pair<string, vector<float>>>getAllData() const;
-    map<string , vector<float>> ConvertToMap(std::vector<std::pair<std::string, std::vector<float>>> three_cols);
-    bool isVectorNameInMap(string name);
-    vector<float> getVectorByName(string name);
+    map<string , vector<float>> ConvertToMap(vector<pair<string, vector<float>>> three_cols);
+    bool isVectorNameInMap(string name)const;
+
+    vector<float> getVectorByName(string name) const;
 };
 #endif /* TIMESERIES_H_ */

@@ -58,7 +58,6 @@ float pearson(float* x, float* y, int size){
     float rootY = var(y, size);
     rootY = sqrtf(rootY);
     float root = rootX * rootY;
-    cout<<"+++++++++++++"<<endl;
     return ((float) avg / root);
 }
 // performs a linear regression and return s the line equation
