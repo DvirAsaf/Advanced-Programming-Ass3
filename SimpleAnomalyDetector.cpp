@@ -1,5 +1,5 @@
 /**
- * SimpleAnomalyDetector.h
+ * SimpleAnomalyDetector.cpp
  *
  * @author : Dvir Asaf 313531113.
  */
@@ -72,7 +72,7 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
     long timeStep;
     map<string, vector<float>> map = ts.allData;
     int vector_size = ts.allData.begin()->second.size();
-    for (int k = 0; k < (vector_size - 1); k++) {
+    for (int k = 0; k < vector_size; k++) {
         for (auto x = cf.begin(); x != cf.end(); x++){
           Point p(ts.getVectorByName(cf.data()->feature1).at(k),
             ts.getVectorByName(cf.data()->feature2).at(k));
