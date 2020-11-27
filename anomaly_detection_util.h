@@ -31,6 +31,5 @@ Line linear_reg(Point** points, int size);
 float dev(Point p,Point** points, int size);
 // returns the deviation between point p and the line
 float dev(Point p,Line l);
-
 float avg(float* x, int size);
 #endif //UNTITLED3_ANOMALY_DETECTION_UTIL_H

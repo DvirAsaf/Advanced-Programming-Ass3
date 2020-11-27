@@ -8,6 +8,7 @@
 #include "anomaly_detection_util.h"
 using std::cout;
 using std::endl;
+//return the average of given float array.
 float avg(float* x, int size) {
     int i = 0;
     // E == sigma
@@ -18,6 +19,7 @@ float avg(float* x, int size) {
     }
     return ((float) E / size);
 }
+//return the square average of given float array.
 float squareAvg(float* x, int size) {
     int i = 0;
     // E == sigma

@@ -5,7 +5,7 @@
  */
 #include "timeseries.h"
 using namespace std;
-
+//read from the given file csv and return pair of string and vector.
 vector<pair<string, vector<float>>> TimeSeries::read_csv(string fileName) const{
     // Reads a CSV file into a vector of <string, vector<int>> pairs where
     // each pair represents <column name, column values>
@@ -26,7 +26,7 @@ vector<pair<string, vector<float>>> TimeSeries::read_csv(string fileName) const{
     myFile.close();
     return result;
 }
-
+//read from the given file line by line.
 ifstream &
 TimeSeries::readTextLineByLine(vector<pair<string, vector<float>>> &result, ifstream &myFile, string &line,
                                float val) const {
@@ -48,7 +48,7 @@ TimeSeries::readTextLineByLine(vector<pair<string, vector<float>>> &result, ifst
     }
     return myFile;
 }
-
+//read from the given file according to the correct column.
 void TimeSeries::ReadCols(vector<pair<string, vector<float>>> &result, string &colName, ifstream &myFile, string &line) const{
     if(myFile.good())
     {
@@ -63,36 +63,7 @@ void TimeSeries::ReadCols(vector<pair<string, vector<float>>> &result, string &c
         }
     }
 }
-
-//vector<pair<string, vector<float>>> TimeSeries::getAllData() const{
-//    return this->allData;
-//}
-
-//vector<float> TimeSeries::getVecByName(vector<pair<string, vector<float>>> cols, string name){
-//    while(isNameInVec(cols, name)) {
-//        int i = cols.size() - 1;
-//        while (i >= 0) {
-//            auto x = cols[i];
-//            if (cols[i].first == name) {
-//                return cols[i].second;
-//            }
-//            i--;
-//        }
-//    }
-//    // if we didn't find return an empty vector
-//    return {};
-//    }
-//}
-
-//bool TimeSeries::isNameInVec(vector<pair<string, vector<float>>> cols, string name) {
-//    for(int i = cols.size() - 1; i <= 0; i--) {
-//        if (cols[i].first == name){
-//            return true;
-//        }
-//    }
-//    return false;
-//}
-
+//convert pair of vector and string to map of string and vector.
 map<string , vector<float>> TimeSeries::ConvertToMap(vector<pair<string, vector<float>>> vector_map)const{
     map<string , vector<float>> map;
     for (auto  &x : vector_map){
@@ -102,7 +73,7 @@ map<string , vector<float>> TimeSeries::ConvertToMap(vector<pair<string, vector<
     }
     return map;
 }
-
+//check if a given name is feature in the time series.
 bool TimeSeries::isVectorNameInMap(string Name) const{
     map<string, vector<float>>::iterator it;
     auto x = this->allData.find(Name);
@@ -111,7 +82,7 @@ bool TimeSeries::isVectorNameInMap(string Name) const{
     }
     return true;
 }
-
+//return the correct vector according to the name feature.
 vector<float> TimeSeries::getVectorByName(string Name) const{
     if (isVectorNameInMap(Name)) {
         auto x = this->allData.find(Name);

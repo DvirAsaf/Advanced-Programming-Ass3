@@ -4,17 +4,18 @@
  * @author : Dvir Asaf 313531113.
  */
 #include "SimpleAnomalyDetector.h"
-
+//constructor
 SimpleAnomalyDetector::SimpleAnomalyDetector() {
     // TODO Auto-generated constructor stub
-
-
 }
+//destructor
 SimpleAnomalyDetector::~SimpleAnomalyDetector() {
     // TODO Auto-generated destructor stub
 }
+//check which columns have the best correlation update feature1,feature2 and corrlation, and create array of points
+// according to the columns vector, and update lin_reg.
+//according to the line and points array send them to dev and update the struct threshold.
 void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts) {
-    // TODO Auto-generated destructor stub
     map<string, vector<float>> time = ts.allData;
     //size of how much values in each vector.
     int vectors_size = time.begin()->second.size();
@@ -57,15 +58,15 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts) {
                 ct.threshold = helpThreshold;
             }
         }
-        ct.threshold = ct.threshold * 1.1;
+        ct.threshold = ct.threshold * 1.10;
         cf.push_back(ct);
             correlationHigher = false;
     }
     }
 }
-
+//according to the values of the struct correlatedFeatures, create points are given in time series and check if the
+// threshold of each point is higher the the value of cf.threshold, if yes return anomaly report.
 vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
-    // TODO Auto-generated destructor stub
     vector<AnomalyReport> vector_Anomaly_Report;
     string description;
     long timeStep;
@@ -85,35 +86,3 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
     }
     return vector_Anomaly_Report;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-////    int size_of_vectors = ts.allData.begin()->first.size();
-//    int vectors_size = ts.allData.begin()->second.size();
-////    vector<float>[size_of_vectors] vectors_array;
-//    float* vector_1;
-//    float* vector_2;
-//    float pearsonResult;
-//    float help = 0.0;
-//    for(unsigned int i = ts.allData.size() - 1; i <= 0; i--) {
-//        vector<float> vector_A = ts.allData.begin()->second;
-//        vector_1 = vector_A.data();
-//        //i am down the value of i once.
-//        vector<float> vector_B = ts.allData.begin()->second;
-////        vectors_array[--i] = ts.allData.begin()->second;
-//        vector_2 = vector_B.data();
-//        pearsonResult = abs(pearson(vector_1,vector_2,vectors_size));
-//        if(pearsonResult > help) {
-//            help = pearsonResult;
-//        }
-//    }
