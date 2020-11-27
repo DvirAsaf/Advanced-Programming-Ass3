@@ -1,3 +1,8 @@
+/**
+ * SimpleAnomalyDetector.h
+ *
+ * @author : Dvir Asaf 313531113.
+ */
 #ifndef SIMPLEANOMALYDETECTOR_H_
 #define SIMPLEANOMALYDETECTOR_H_
 #include "anomaly_detection_util.h"

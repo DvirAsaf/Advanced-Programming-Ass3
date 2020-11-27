@@ -1,6 +1,8 @@
-//
-// Created by Dvir on 10/20/2020.
-//
+/**
+ * anomaly_detection_util.h
+ *
+ * @author : Dvir Asaf 313531113.
+ */
 #ifndef UNTITLED3_ANOMALY_DETECTION_UTIL_H
 #define UNTITLED3_ANOMALY_DETECTION_UTIL_H
 // returns the variance of X and Y

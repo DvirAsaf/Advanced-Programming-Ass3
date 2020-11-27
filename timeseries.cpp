@@ -1,6 +1,8 @@
-//
-// Created by Dvir on 11/14/2020.
-//
+/**
+ * timeseries.cpp
+ *
+ * @author : Dvir Asaf 313531113.
+ */
 #include "timeseries.h"
 using namespace std;
 

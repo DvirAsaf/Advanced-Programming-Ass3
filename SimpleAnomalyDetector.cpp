@@ -1,3 +1,8 @@
+/**
+ * SimpleAnomalyDetector.h
+ *
+ * @author : Dvir Asaf 313531113.
+ */
 #include "SimpleAnomalyDetector.h"
 
 SimpleAnomalyDetector::SimpleAnomalyDetector() {

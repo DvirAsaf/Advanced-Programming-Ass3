@@ -1,3 +1,8 @@
+/**
+ * timeseries.h
+ *
+ * @author : Dvir Asaf 313531113.
+ */
 #ifndef TIMESERIES_H_
 #define TIMESERIES_H_
 #include <vector>
