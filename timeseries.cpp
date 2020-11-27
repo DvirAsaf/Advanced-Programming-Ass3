@@ -4,20 +4,20 @@
 #include "timeseries.h"
 using namespace std;
 
-vector<pair<string, vector<float>>> TimeSeries::read_csv(string filename) {
+vector<pair<string, vector<float>>> TimeSeries::read_csv(string fileName) const{
     // Reads a CSV file into a vector of <string, vector<int>> pairs where
     // each pair represents <column name, column values>
     // Create a vector of <string, int vector> pairs to store the result
     vector<pair<string, vector<float>>> result;
     // Create an input filestream
-    ifstream myFile(filename);
+    ifstream myFile(fileName);
     // Make sure the file is open
     if(!myFile.is_open()) throw runtime_error("Could not open file");
     // Helper vars
-    string line, colname;
+    string line, colName;
     float val = 0;
     // Read the column names
-    ReadCols(result, colname, myFile, line);
+    ReadCols(result, colName, myFile, line);
     // Read data, line by line
     myFile = dynamic_cast<basic_ifstream<char> &&>(readTextLineByLine(result, myFile, line, val));
     // Close file
@@ -30,7 +30,7 @@ TimeSeries::readTextLineByLine(vector<pair<string, vector<float>>> &result, ifst
                                float val) const {
     while(getline(myFile, line))
     {
-        // Create a stringstream of the current line
+        // Create a stringStream of the current line
         stringstream ss(line);
         // Keep track of the current column index
         int colIdx = 0;
@@ -47,17 +47,17 @@ TimeSeries::readTextLineByLine(vector<pair<string, vector<float>>> &result, ifst
     return myFile;
 }
 
-void TimeSeries::ReadCols(vector<pair<string, vector<float>>> &result, string &colname, ifstream &myFile, string &line) {
+void TimeSeries::ReadCols(vector<pair<string, vector<float>>> &result, string &colName, ifstream &myFile, string &line) const{
     if(myFile.good())
     {
         // Extract the first line in the file
         getline(myFile, line);
-        // Create a stringstream from line
+        // Create a stringStream from line
         stringstream ss(line);
         // Extract each column name
-        while(getline(ss, colname, ',')){
-            // Initialize and add <colname, int vector> pairs to result
-            result.push_back({colname, vector<float> {}});
+        while(getline(ss, colName, ',')){
+            // Initialize and add <colName, int vector> pairs to result
+            result.push_back({colName, vector<float> {}});
         }
     }
 }
@@ -91,9 +91,9 @@ void TimeSeries::ReadCols(vector<pair<string, vector<float>>> &result, string &c
 //    return false;
 //}
 
-map<string , vector<float>> TimeSeries::ConvertToMap(vector<pair<string, vector<float>>> three_cols){
+map<string , vector<float>> TimeSeries::ConvertToMap(vector<pair<string, vector<float>>> vector_map)const{
     map<string , vector<float>> map;
-    for (auto  &x : three_cols){
+    for (auto  &x : vector_map){
         string col_name = x.first;
         auto vec = x.second;
         map.insert({col_name, vec});
@@ -101,18 +101,18 @@ map<string , vector<float>> TimeSeries::ConvertToMap(vector<pair<string, vector<
     return map;
 }
 
-bool TimeSeries::isVectorNameInMap(string name) const{
+bool TimeSeries::isVectorNameInMap(string Name) const{
     map<string, vector<float>>::iterator it;
-    auto x = this->allData.find(name);
+    auto x = this->allData.find(Name);
     if (it == this->allData.end()) {
         return false;
     }
     return true;
 }
 
-vector<float> TimeSeries::getVectorByName(string name) const{
-    if (isVectorNameInMap(name)) {
-        auto x = this->allData.find(name);
+vector<float> TimeSeries::getVectorByName(string Name) const{
+    if (isVectorNameInMap(Name)) {
+        auto x = this->allData.find(Name);
         return x->second;
     }
     return {};

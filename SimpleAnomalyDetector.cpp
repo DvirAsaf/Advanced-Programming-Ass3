@@ -11,13 +11,16 @@ SimpleAnomalyDetector::~SimpleAnomalyDetector() {
 void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts) {
     // TODO Auto-generated destructor stub
     map<string, vector<float>> time = ts.allData;
-    struct correlatedFeatures ct;
     //size of how much values in each vector.
     int vectors_size = time.begin()->second.size();
-    ct.corrlation = 0.0;
+    Point* ps[vectors_size];
     float *vector_ptr_1;
     float *vector_ptr_2;
+    bool correlationHigher = false;
     for (auto col_1 = time.begin(); col_1 != time.end(); col_1++) {
+        struct correlatedFeatures ct;
+        ct.corrlation = 0.0;
+        ct.threshold = 0.0;
         for (auto col_2 = next(col_1); col_2 != time.end(); col_2++) {
             if (col_1->first == col_2->first) {
                 continue;
@@ -26,31 +29,70 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts) {
             float* vector_ptr_B = col_2->second.data();
             float pearsonResult = abs(pearson(vector_ptr_A, vector_ptr_B, vectors_size));
             if (pearsonResult > ct.corrlation && pearsonResult > 0.9) {
-                //save the ptr's of the best correlation.
+                //save the ptr of the best correlation.
                 vector_ptr_1 = vector_ptr_A;
                 vector_ptr_2 = vector_ptr_B;
-                //save the name of the best correlation ptr's.
+                //save the name of the best correlation ptr.
                 ct.feature1 = col_1->first;
                 ct.feature2 = col_2->first;
                 ct.corrlation = pearsonResult;
-            }
-            //make array of points with the best correlation in the map.
-            Point* ps[vectors_size];
-            for(int i = 0; i < vectors_size - 1; i++) {
-                ps[i] = new Point(vector_ptr_1[i], vector_ptr_2[i]);
-            }
-            //make a line from the array of best correlation points.
-            ct.lin_reg = linear_reg(ps, vectors_size);
-            for (int j = 0; j <vectors_size - 1 ; j++) {
-                float helpConst = 0.0;
-                float helpThreshold = dev(*ps[j], ct.lin_reg);
-                if(helpConst < helpThreshold) {
-                    ct.threshold = helpThreshold;
-                }
+                correlationHigher = true;
             }
         }
+        if (correlationHigher) {
+        //make array of points with the best correlation in the map.
+        for(int i = 0; i < vectors_size ; i++) {
+            ps[i] = new Point(vector_ptr_1[i], vector_ptr_2[i]);
+        }
+        //make a line from the array of best correlation points.
+        ct.lin_reg = linear_reg(ps, vectors_size);
+        for (int j = 0; j < vectors_size ; j++) {
+            float helpThreshold = dev(*ps[j], ct.lin_reg);
+            if (ct.threshold < helpThreshold) {
+                ct.threshold = helpThreshold;
+            }
+        }
+        ct.threshold = ct.threshold * 1.1;
+        cf.push_back(ct);
+            correlationHigher = false;
     }
-    cf.push_back(ct);
+    }
+}
+
+vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
+    // TODO Auto-generated destructor stub
+    vector<AnomalyReport> vector_Anomaly_Report;
+    string description;
+    long timeStep;
+    map<string, vector<float>> map = ts.allData;
+    int vector_size = ts.allData.begin()->second.size();
+    for (int k = 0; k < (vector_size - 1); k++) {
+        for (auto x = cf.begin(); x != cf.end(); x++){
+          Point p(ts.getVectorByName(cf.data()->feature1).at(k),
+            ts.getVectorByName(cf.data()->feature2).at(k));
+          if (dev(p,cf.data()->lin_reg) > cf.data()->threshold){
+              description = cf.data()->feature1 + "-" + cf.data()->feature2;
+              timeStep = k + 1;
+              AnomalyReport c = { description, timeStep};
+              vector_Anomaly_Report.push_back(c);
+          }
+        }
+    }
+    return vector_Anomaly_Report;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 ////    int size_of_vectors = ts.allData.begin()->first.size();
 //    int vectors_size = ts.allData.begin()->second.size();
 ////    vector<float>[size_of_vectors] vectors_array;
@@ -70,28 +112,3 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts) {
 //            help = pearsonResult;
 //        }
 //    }
-}
-
-vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
-    // TODO Auto-generated destructor stub
-    vector<AnomalyReport> vector_Anomaly_Report;
-    string description;
-    long timeStep;
-    map<string, vector<float>> map = ts.allData;
-    int vector_size = ts.allData.begin()->second.size();
-    for (int i = 0; i < vector_size; i++) {
-        for (auto x = cf.begin(); x != cf.end(); x++){
-//            if(col_1 == cf.data()->feature1 && col_2 == cf.data()->feature2)
-          Point p(ts.getVectorByName(cf.data()->feature1).at(i),
-            ts.getVectorByName(cf.data()->feature2).at(i));
-          if (dev(p,cf.data()->lin_reg) > cf.data()->threshold){
-              description = cf.data()->feature1+ "-" + cf.data()->feature2;
-              timeStep = i + 1;
-              AnomalyReport c = { description, timeStep};
-              vector_Anomaly_Report.push_back(c);
-          }
-        }
-//        return vector_Anomaly_Report(AnomalyReport(description, timeStep));
-        return vector_Anomaly_Report;
-    }
-}
