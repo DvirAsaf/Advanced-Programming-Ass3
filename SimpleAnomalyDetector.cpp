@@ -33,7 +33,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts) {
             }
             float* vector_ptr_A = col_1->second.data();
             float* vector_ptr_B = col_2->second.data();
-            float pearsonResult = abs(pearson(vector_ptr_A, vector_ptr_B, vectors_size));
+            float pearsonResult = fabs(pearson(vector_ptr_A, vector_ptr_B, vectors_size));
             if (pearsonResult > ct.corrlation && pearsonResult > 0.9) {
                 //save the ptr of the best correlation.
                 vector_ptr_1 = vector_ptr_A;
@@ -58,7 +58,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts) {
                 ct.threshold = helpThreshold;
             }
         }
-        ct.threshold = ct.threshold * 1.10;
+        ct.threshold *=  1.10;
         cf.push_back(ct);
             correlationHigher = false;
     }
@@ -73,13 +73,13 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
     map<string, vector<float>> map = ts.allData;
     int vector_size = ts.allData.begin()->second.size();
     for (int k = 0; k < vector_size; k++) {
-        for (auto x = cf.begin(); x != cf.end(); x++){
-          Point p(ts.getVectorByName(cf.data()->feature1).at(k),
-            ts.getVectorByName(cf.data()->feature2).at(k));
-          if (dev(p,cf.data()->lin_reg) > cf.data()->threshold){
-              description = cf.data()->feature1 + "-" + cf.data()->feature2;
+        for (correlatedFeatures const& x : cf) {
+          Point p(ts.getVectorByName(x.feature1)[k],
+            ts.getVectorByName(x.feature2)[k]);
+          if (dev(p,x.lin_reg) > x.threshold){
+              description = x.feature1 + "-" + x.feature2;
               timeStep = k + 1;
-              AnomalyReport c = { description, timeStep};
+              AnomalyReport c(description, timeStep);
               vector_Anomaly_Report.push_back(c);
           }
         }
