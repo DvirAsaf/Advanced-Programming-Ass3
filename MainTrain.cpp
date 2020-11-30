@@ -83,6 +83,12 @@ int main(){
     vector<AnomalyReport> r = ad.detect(ts2);
     bool anomlyDetected=false;
     int falseAlarms=0;
+
+    for (int i = 0; i < r.size(); ++i) {
+      printf("%d\n", r[i].timeStep);
+
+    }
+
     for_each(r.begin(),r.end(),[&anomaly,&anomlyDetected,&falseAlarms](AnomalyReport ar){
         if(ar.description=="A-C" && ar.timeStep == anomaly)
             anomlyDetected=true;
